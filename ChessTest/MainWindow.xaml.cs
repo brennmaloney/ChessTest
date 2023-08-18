@@ -23,8 +23,24 @@ namespace ChessTest
         public MainWindow()
         {
             InitializeComponent();
-            BrushConverter bc = new BrushConverter();
-            board.Background = (Brush)bc.ConvertFrom("#cacfb0");
+            Image WhitePawn = new Image();
+            Image WhiteKnight = new Image();
+            Image WhiteBishop = new Image();
+            Image WhiteRook = new Image();
+            Image WhiteQueen = new Image();
+            Image WhiteKing = new Image();
+            Image BlackPawn = new Image();
+            Image BlackKnight = new Image();
+            Image BlackBishop = new Image();
+            Image BlackRook = new Image();
+            Image BlackQueen = new Image();
+            Image BlackKing = new Image();
+
+            WhitePawn.Source = new BitmapImage(new Uri(@"/ChessTest;components/Images/WhitePawn.png", UriKind.Relative));
+            
+
+            
+
         }
     }
 }
