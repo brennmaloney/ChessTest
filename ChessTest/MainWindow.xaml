@@ -7,164 +7,225 @@
         mc:Ignorable="d"
         Title="Chess" Height="1000" Width="1000" Background="#003151">
     <Border BorderBrush="#57A0D2" BorderThickness="4" Margin="40">
-        <Grid x:Name="board">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-
+        <UniformGrid x:Name="board" Rows="8" Columns="8">
+            <UniformGrid.Resources>
+                <Style TargetType="{x:Type Grid}">
+                    <EventSetter Event="MouseDown" Handler="SquareMouseDown"></EventSetter>
+                    <EventSetter Event="MouseMove" Handler="SquareMouseMove"></EventSetter>
+                    <EventSetter Event="MouseUp" Handler="SquareMouseUp"></EventSetter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="False">
+                            <Setter Property="Opacity" Value="1"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Opacity" Value="0.9"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+                <Style TargetType="{x:Type Image}">
+                    <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                    <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                </Style>
+            </UniformGrid.Resources>
             <Grid x:Name="A8rect" Background="#cacfb0" Grid.Column="0" Grid.Row="0">
-                <Image Source="/Images/BlackRook.png" Width="90" Height="90"/>
+                <Image x:Name="BRook1" Source="/Images/BlackRook.png"/>
             </Grid>
             <Grid x:Name="B8rect" Background="#265726" Grid.Column="1" Grid.Row="0">
-                <Image Source="/Images/BlackKnight.png" Width="90" Height="90"/>
+                <Image x:Name="BKnight1" Source="/Images/BlackKnight.png"/>
             </Grid>
             <Grid x:Name="C8rect" Background="#cacfb0" Grid.Column="2" Grid.Row="0">
-                <Image Source="/Images/BlackBishop.png" Width="90" Height="90"/>
+                <Image x:Name="BBishop1" Source="/Images/BlackBishop.png"/>
             </Grid>
             <Grid x:Name="D8rect" Background="#265726" Grid.Column="3" Grid.Row="0">
-                <Image Source="/Images/BlackQueen.png" Width="90" Height="90"/>
+                <Image x:Name="BQueen" Source="/Images/BlackQueen.png"/>
             </Grid>
             <Grid x:Name="E8rect" Background="#cacfb0" Grid.Column="4" Grid.Row="0">
-                <Image Source="/Images/BlackKing.png" Width="90" Height="90"/>
+                <Image x:Name="BKing" Source="/Images/BlackKing.png"/>
             </Grid>
             <Grid x:Name="F8rect" Background="#265726" Grid.Column="5" Grid.Row="0">
-                <Image Source="/Images/BlackBishop.png" Width="90" Height="90"/>
+                <Image x:Name="BBishop2" Source="/Images/BlackBishop.png"/>
             </Grid>
             <Grid x:Name="G8rect" Background="#cacfb0" Grid.Column="6" Grid.Row="0">
-                <Image Source="/Images/BlackKnight.png" Width="90" Height="90"/>
+                <Image x:Name="BKnight2" Source="/Images/BlackKnight.png"/>
             </Grid>
             <Grid x:Name="H8rect" Background="#265726" Grid.Column="7" Grid.Row="0">
-                <Image Source="/Images/BlackRook.png" Width="90" Height="90"/>
+                <Image x:Name="BRook2" Source="/Images/BlackRook.png"/>
             </Grid>
 
             <Grid x:Name="A7rect" Background="#265726" Grid.Column="0" Grid.Row="1">
-                <Image Source="/Images/BlackPawn.png" Width="90" Height="90"/>
+                <Image x:Name="BPawn1" Source="/Images/BlackPawn.png"/>
             </Grid>
             <Grid x:Name="B7rect" Background="#cacfb0" Grid.Column="1" Grid.Row="1">
-                <Image Source="/Images/BlackPawn.png" Width="90" Height="90"/>
+                <Image x:Name="BPawn2" Source="/Images/BlackPawn.png"/>
             </Grid>
             <Grid x:Name="C7rect" Background="#265726" Grid.Column="2" Grid.Row="1">
-                <Image Source="/Images/BlackPawn.png" Width="90" Height="90"/>
+                <Image x:Name="BPawn3" Source="/Images/BlackPawn.png"/>
             </Grid>
             <Grid x:Name="D7rect" Background="#cacfb0" Grid.Column="3" Grid.Row="1">
-                <Image Source="/Images/BlackPawn.png" Width="90" Height="90"/>
+                <Image x:Name="BPawn4" Source="/Images/BlackPawn.png"/>
             </Grid>
             <Grid x:Name="E7rect" Background="#265726" Grid.Column="4" Grid.Row="1">
-                <Image Source="/Images/BlackPawn.png" Width="90" Height="90"/>
+                <Image x:Name="BPawn5" Source="/Images/BlackPawn.png"/>
             </Grid>
             <Grid x:Name="F7rect" Background="#cacfb0" Grid.Column="5" Grid.Row="1">
-                <Image Source="/Images/BlackPawn.png" Width="90" Height="90"/>
+                <Image x:Name="BPawn6" Source="/Images/BlackPawn.png"/>
             </Grid>
             <Grid x:Name="G7rect" Background="#265726" Grid.Column="6" Grid.Row="1">
-                <Image Source="/Images/BlackPawn.png" Width="90" Height="90"/>
+                <Image x:Name="BPawn7" Source="/Images/BlackPawn.png"/>
             </Grid>
             <Grid x:Name="H7rect" Background="#cacfb0" Grid.Column="7" Grid.Row="1">
-                <Image Source="/Images/BlackPawn.png" Width="90" Height="90"/>
+                <Image x:Name="BPawn8" Source="/Images/BlackPawn.png"/>
             </Grid>
 
-            <Grid x:Name="A6rect" Background="#cacfb0" Grid.Column="0" Grid.Row="2"></Grid>
-            <Grid x:Name="B6rect" Background="#265726" Grid.Column="1" Grid.Row="2"></Grid>
-            <Grid x:Name="C6rect" Background="#cacfb0" Grid.Column="2" Grid.Row="2"></Grid>
-            <Grid x:Name="D6rect" Background="#265726" Grid.Column="3" Grid.Row="2"></Grid>
-            <Grid x:Name="E6rect" Background="#cacfb0" Grid.Column="4" Grid.Row="2"></Grid>
-            <Grid x:Name="F6rect" Background="#265726" Grid.Column="5" Grid.Row="2"></Grid>
-            <Grid x:Name="G6rect" Background="#cacfb0" Grid.Column="6" Grid.Row="2"></Grid>
-            <Grid x:Name="H6rect" Background="#265726" Grid.Column="7" Grid.Row="2"></Grid>
+            <Grid x:Name="A6rect" Background="#cacfb0" Grid.Column="0" Grid.Row="2">
+                <Image/>
+            </Grid>
+            <Grid x:Name="B6rect" Background="#265726" Grid.Column="1" Grid.Row="2">
+                <Image/>
+            </Grid>
+            <Grid x:Name="C6rect" Background="#cacfb0" Grid.Column="2" Grid.Row="2">
+                <Image/>
+            </Grid>
+            <Grid x:Name="D6rect" Background="#265726" Grid.Column="3" Grid.Row="2">
+                <Image/>
+            </Grid>
+            <Grid x:Name="E6rect" Background="#cacfb0" Grid.Column="4" Grid.Row="2">
+                <Image/>
+            </Grid>
+            <Grid x:Name="F6rect" Background="#265726" Grid.Column="5" Grid.Row="2">
+                <Image/>
+            </Grid>
+            <Grid x:Name="G6rect" Background="#cacfb0" Grid.Column="6" Grid.Row="2">
+                <Image/>
+            </Grid>
+            <Grid x:Name="H6rect" Background="#265726" Grid.Column="7" Grid.Row="2">
+                <Image/>
+            </Grid>
 
-            <Grid x:Name="A5rect" Background="#265726" Grid.Column="0" Grid.Row="3"></Grid>
-            <Grid x:Name="B5rect" Background="#cacfb0" Grid.Column="1" Grid.Row="3"></Grid>
-            <Grid x:Name="C5rect" Background="#265726" Grid.Column="2" Grid.Row="3"></Grid>
-            <Grid x:Name="D5rect" Background="#cacfb0" Grid.Column="3" Grid.Row="3"></Grid>
-            <Grid x:Name="E5rect" Background="#265726" Grid.Column="4" Grid.Row="3"></Grid>
-            <Grid x:Name="F5rect" Background="#cacfb0" Grid.Column="5" Grid.Row="3"></Grid>
-            <Grid x:Name="G5rect" Background="#265726" Grid.Column="6" Grid.Row="3"></Grid>
-            <Grid x:Name="H5rect" Background="#cacfb0" Grid.Column="7" Grid.Row="3"></Grid>
+            <Grid x:Name="A5rect" Background="#265726" Grid.Column="0" Grid.Row="3">
+                <Image/>
+            </Grid>
+            <Grid x:Name="B5rect" Background="#cacfb0" Grid.Column="1" Grid.Row="3">
+                <Image/>
+            </Grid>
+            <Grid x:Name="C5rect" Background="#265726" Grid.Column="2" Grid.Row="3">
+                <Image/>
+            </Grid>
+            <Grid x:Name="D5rect" Background="#cacfb0" Grid.Column="3" Grid.Row="3">
+                <Image/>
+            </Grid>
+            <Grid x:Name="E5rect" Background="#265726" Grid.Column="4" Grid.Row="3">
+                <Image/>
+            </Grid>
+            <Grid x:Name="F5rect" Background="#cacfb0" Grid.Column="5" Grid.Row="3">
+                <Image/>
+            </Grid>
+            <Grid x:Name="G5rect" Background="#265726" Grid.Column="6" Grid.Row="3">
+                <Image/>
+            </Grid>
+            <Grid x:Name="H5rect" Background="#cacfb0" Grid.Column="7" Grid.Row="3">
+                <Image/>
+            </Grid>
 
-            <Grid x:Name="A4rect" Background="#cacfb0" Grid.Column="0" Grid.Row="4"></Grid>
-            <Grid x:Name="B4rect" Background="#265726" Grid.Column="1" Grid.Row="4"></Grid>
-            <Grid x:Name="C4rect" Background="#cacfb0" Grid.Column="2" Grid.Row="4"></Grid>
-            <Grid x:Name="D4rect" Background="#265726" Grid.Column="3" Grid.Row="4"></Grid>
-            <Grid x:Name="E4rect" Background="#cacfb0" Grid.Column="4" Grid.Row="4"></Grid>
-            <Grid x:Name="F4rect" Background="#265726" Grid.Column="5" Grid.Row="4"></Grid>
-            <Grid x:Name="G4rect" Background="#cacfb0" Grid.Column="6" Grid.Row="4"></Grid>
-            <Grid x:Name="H4rect" Background="#265726" Grid.Column="7" Grid.Row="4"></Grid>
+            <Grid x:Name="A4rect" Background="#cacfb0" Grid.Column="0" Grid.Row="4">
+                <Image/>
+            </Grid>
+            <Grid x:Name="B4rect" Background="#265726" Grid.Column="1" Grid.Row="4">
+                <Image/>
+            </Grid>
+            <Grid x:Name="C4rect" Background="#cacfb0" Grid.Column="2" Grid.Row="4">
+                <Image/>
+            </Grid>
+            <Grid x:Name="D4rect" Background="#265726" Grid.Column="3" Grid.Row="4">
+                <Image/>
+            </Grid>
+            <Grid x:Name="E4rect" Background="#cacfb0" Grid.Column="4" Grid.Row="4">
+                <Image/>
+            </Grid>
+            <Grid x:Name="F4rect" Background="#265726" Grid.Column="5" Grid.Row="4">
+                <Image/>
+            </Grid>
+            <Grid x:Name="G4rect" Background="#cacfb0" Grid.Column="6" Grid.Row="4">
+                <Image/>
+            </Grid>
+            <Grid x:Name="H4rect" Background="#265726" Grid.Column="7" Grid.Row="4">
+                <Image/>
+            </Grid>
 
-            <Grid x:Name="A3rect" Background="#265726" Grid.Column="0" Grid.Row="5"></Grid>
-            <Grid x:Name="B3rect" Background="#cacfb0" Grid.Column="1" Grid.Row="5"></Grid>
-            <Grid x:Name="C3rect" Background="#265726" Grid.Column="2" Grid.Row="5"></Grid>
-            <Grid x:Name="D3rect" Background="#cacfb0" Grid.Column="3" Grid.Row="5"></Grid>
-            <Grid x:Name="E3rect" Background="#265726" Grid.Column="4" Grid.Row="5"></Grid>
-            <Grid x:Name="F3rect" Background="#cacfb0" Grid.Column="5" Grid.Row="5"></Grid>
-            <Grid x:Name="G3rect" Background="#265726" Grid.Column="6" Grid.Row="5"></Grid>
-            <Grid x:Name="H3rect" Background="#cacfb0" Grid.Column="7" Grid.Row="5"></Grid>
+            <Grid x:Name="A3rect" Background="#265726" Grid.Column="0" Grid.Row="5">
+                <Image/>
+            </Grid>
+            <Grid x:Name="B3rect" Background="#cacfb0" Grid.Column="1" Grid.Row="5">
+                <Image/>
+            </Grid>
+            <Grid x:Name="C3rect" Background="#265726" Grid.Column="2" Grid.Row="5">
+                <Image/>
+            </Grid>
+            <Grid x:Name="D3rect" Background="#cacfb0" Grid.Column="3" Grid.Row="5">
+                <Image/>
+            </Grid>
+            <Grid x:Name="E3rect" Background="#265726" Grid.Column="4" Grid.Row="5">
+                <Image/>
+            </Grid>
+            <Grid x:Name="F3rect" Background="#cacfb0" Grid.Column="5" Grid.Row="5">
+                <Image/>
+            </Grid>
+            <Grid x:Name="G3rect" Background="#265726" Grid.Column="6" Grid.Row="5">
+                <Image/>
+            </Grid>
+            <Grid x:Name="H3rect" Background="#cacfb0" Grid.Column="7" Grid.Row="5">
+                <Image/>
+            </Grid>
 
             <Grid x:Name="A2rect" Background="#cacfb0" Grid.Column="0" Grid.Row="6">
-                <Image Source="/Images/WhitePawn.png" Width="90" Height="90"/>
+                <Image x:Name="WPawn1" Source="/Images/WhitePawn.png"/>
             </Grid>
             <Grid x:Name="B2rect" Background="#265726" Grid.Column="1" Grid.Row="6">
-                <Image Source="/Images/WhitePawn.png" Width="90" Height="90"/>
+                <Image x:Name="WPawn2" Source="/Images/WhitePawn.png"/>
             </Grid>
             <Grid x:Name="C2rect" Background="#cacfb0" Grid.Column="2" Grid.Row="6">
-                <Image Source="/Images/WhitePawn.png" Width="90" Height="90"/>
+                <Image x:Name="WPawn3" Source="/Images/WhitePawn.png"/>
             </Grid>
             <Grid x:Name="D2rect" Background="#265726" Grid.Column="3" Grid.Row="6">
-                <Image Source="/Images/WhitePawn.png" Width="90" Height="90"/>
+                <Image x:Name="WPawn4" Source="/Images/WhitePawn.png"/>
             </Grid>
             <Grid x:Name="E2rect" Background="#cacfb0" Grid.Column="4" Grid.Row="6">
-                <Image Source="/Images/WhitePawn.png" Width="90" Height="90"/>
+                <Image x:Name="WPawn5" Source="/Images/WhitePawn.png"/>
             </Grid>
             <Grid x:Name="F2rect" Background="#265726" Grid.Column="5" Grid.Row="6">
-                <Image Source="/Images/WhitePawn.png" Width="90" Height="90"/>
+                <Image x:Name="WPawn6" Source="/Images/WhitePawn.png"/>
             </Grid>
             <Grid x:Name="G2rect" Background="#cacfb0" Grid.Column="6" Grid.Row="6">
-                <Image Source="/Images/WhitePawn.png" Width="90" Height="90"/>
+                <Image x:Name="WPawn7" Source="/Images/WhitePawn.png"/>
             </Grid>
             <Grid x:Name="H2rect" Background="#265726" Grid.Column="7" Grid.Row="6">
-                <Image Source="/Images/WhitePawn.png" Width="90" Height="90"/>
+                <Image x:Name="WPawn8" Source="/Images/WhitePawn.png"/>
             </Grid>
 
             <Grid x:Name="A1rect" Background="#265726" Grid.Column="0" Grid.Row="7">
-                <Image Source="/Images/WhiteRook.png" Width="90" Height="90"/>
+                <Image x:Name="WRook1" Source="/Images/WhiteRook.png"/>
             </Grid>
             <Grid x:Name="B1rect" Background="#cacfb0" Grid.Column="1" Grid.Row="7">
-                <Image Source="/Images/WhiteKnight.png" Width="90" Height="90"/>
+                <Image x:Name="WKnight1" Source="/Images/WhiteKnight.png"/>
             </Grid>
             <Grid x:Name="C1rect" Background="#265726" Grid.Column="2" Grid.Row="7">
-                <Image Source="/Images/WhiteBishop.png" Width="90" Height="90"/>
+                <Image x:Name="WBishop1" Source="/Images/WhiteBishop.png"/>
             </Grid>
             <Grid x:Name="D1rect" Background="#cacfb0" Grid.Column="3" Grid.Row="7">
-                <Image Source="/Images/WhiteQueen.png" Width="90" Height="90"/>
+                <Image x:Name="WQueen" Source="/Images/WhiteQueen.png"/>
             </Grid>
             <Grid x:Name="E1rect" Background="#265726" Grid.Column="4" Grid.Row="7">
-                <Image Source="/Images/WhiteKing.png" Width="90" Height="90"/>
+                <Image x:Name="WKing" Source="/Images/WhiteKing.png"/>
             </Grid>
             <Grid x:Name="F1rect" Background="#cacfb0" Grid.Column="5" Grid.Row="7">
-                <Image Source="/Images/WhiteBishop.png" Width="90" Height="90"/>
+                <Image x:Name="WBishop2" Source="/Images/WhiteBishop.png"/>
             </Grid>
             <Grid x:Name="G1rect" Background="#265726" Grid.Column="6" Grid.Row="7">
-                <Image Source="/Images/WhiteKnight.png" Width="90" Height="90"/>
+                <Image x:Name="WKnight2" Source="/Images/WhiteKnight.png"/>
             </Grid>
             <Grid x:Name="H1rect" Background="#cacfb0" Grid.Column="7" Grid.Row="7">
-                <Image Source="/Images/WhiteRook.png" Width="90" Height="90"/>
+                <Image x:Name="WRook2" Source="/Images/WhiteRook.png"/>
             </Grid>
-
-        </Grid>
+        </UniformGrid>
     </Border>
 </Window>
