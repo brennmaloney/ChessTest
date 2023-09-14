@@ -20,13 +20,13 @@ namespace ChessTest
     {
 
         private bool isDragging = false;
-        private UIElement draggedPiece;
+        private Grid draggedPiece;
         private Image originalImage;
         private Image pieceImage;
         private Point startPosition;
         private Point originalPosition;
         private ImageSource originalSource;
-        private Dictionary<string, ImageSource> pieceImageSources = new Dictionary<String, ImageSource>();
+        private Dictionary<string, ImageSource> pieceSources = new Dictionary<String, ImageSource>();
 
         public MainWindow()
         {
@@ -36,126 +36,204 @@ namespace ChessTest
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            pieceImageSources["A8"] = new BitmapImage(new Uri("/Images/BlackRook.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["B8"] = new BitmapImage(new Uri("/Images/BlackKnight.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["C8"] = new BitmapImage(new Uri("/Images/BlackBishop.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["D8"] = new BitmapImage(new Uri("/Images/BlackQueen.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["E8"] = new BitmapImage(new Uri("/Images/BlackKing.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["F8"] = new BitmapImage(new Uri("/Images/BlackBishop.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["G8"] = new BitmapImage(new Uri("/Images/BlackKnight.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["H8"] = new BitmapImage(new Uri("/Images/BlackRook.png", UriKind.RelativeOrAbsolute));
+            pieceSources["B8"] = new BitmapImage(new Uri("/Images/BlackKnight.png", UriKind.RelativeOrAbsolute));
+            pieceSources["C8"] = new BitmapImage(new Uri("/Images/BlackBishop.png", UriKind.RelativeOrAbsolute));
+            pieceSources["D8"] = new BitmapImage(new Uri("/Images/BlackQueen.png", UriKind.RelativeOrAbsolute));
+            pieceSources["E8"] = new BitmapImage(new Uri("/Images/BlackKing.png", UriKind.RelativeOrAbsolute));
+            pieceSources["F8"] = new BitmapImage(new Uri("/Images/BlackBishop.png", UriKind.RelativeOrAbsolute));
+            pieceSources["G8"] = new BitmapImage(new Uri("/Images/BlackKnight.png", UriKind.RelativeOrAbsolute));
+            pieceSources["H8"] = new BitmapImage(new Uri("/Images/BlackRook.png", UriKind.RelativeOrAbsolute));
 
-            pieceImageSources["A7"] = new BitmapImage(new Uri("/Images/BlackPawn.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["B7"] = new BitmapImage(new Uri("/Images/BlackPawn.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["C7"] = new BitmapImage(new Uri("/Images/BlackPawn.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["D7"] = new BitmapImage(new Uri("/Images/BlackPawn.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["E7"] = new BitmapImage(new Uri("/Images/BlackPawn.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["F7"] = new BitmapImage(new Uri("/Images/BlackPawn.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["G7"] = new BitmapImage(new Uri("/Images/BlackPawn.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["H7"] = new BitmapImage(new Uri("/Images/BlackPawn.png", UriKind.RelativeOrAbsolute));
+            pieceSources["A8"] = new BitmapImage(new Uri("/Images/BlackRook.png", UriKind.RelativeOrAbsolute));
+            pieceSources["A7"] = new BitmapImage(new Uri("/Images/BlackPawn.png", UriKind.RelativeOrAbsolute));
+            pieceSources["B7"] = new BitmapImage(new Uri("/Images/BlackPawn.png", UriKind.RelativeOrAbsolute));
+            pieceSources["C7"] = new BitmapImage(new Uri("/Images/BlackPawn.png", UriKind.RelativeOrAbsolute));
+            pieceSources["D7"] = new BitmapImage(new Uri("/Images/BlackPawn.png", UriKind.RelativeOrAbsolute));
+            pieceSources["E7"] = new BitmapImage(new Uri("/Images/BlackPawn.png", UriKind.RelativeOrAbsolute));
+            pieceSources["F7"] = new BitmapImage(new Uri("/Images/BlackPawn.png", UriKind.RelativeOrAbsolute));
+            pieceSources["G7"] = new BitmapImage(new Uri("/Images/BlackPawn.png", UriKind.RelativeOrAbsolute));
+            pieceSources["H7"] = new BitmapImage(new Uri("/Images/BlackPawn.png", UriKind.RelativeOrAbsolute));
 
-            pieceImageSources["A6"] = null;
-            pieceImageSources["B6"] = null;
-            pieceImageSources["C6"] = null;
-            pieceImageSources["D6"] = null;
-            pieceImageSources["E6"] = null;
-            pieceImageSources["F6"] = null;
-            pieceImageSources["G6"] = null;
-            pieceImageSources["H6"] = null;
+            pieceSources["A6"] = null;
+            pieceSources["B6"] = null;
+            pieceSources["C6"] = null;
+            pieceSources["D6"] = null;
+            pieceSources["E6"] = null;
+            pieceSources["F6"] = null;
+            pieceSources["G6"] = null;
+            pieceSources["H6"] = null;
 
-            pieceImageSources["A5"] = null;
-            pieceImageSources["B5"] = null;
-            pieceImageSources["C5"] = null;
-            pieceImageSources["D5"] = null;
-            pieceImageSources["E5"] = null;
-            pieceImageSources["F5"] = null;
-            pieceImageSources["G5"] = null;
-            pieceImageSources["H5"] = null;
+            pieceSources["A5"] = null;
+            pieceSources["B5"] = null;
+            pieceSources["C5"] = null;
+            pieceSources["D5"] = null;
+            pieceSources["E5"] = null;
+            pieceSources["F5"] = null;
+            pieceSources["G5"] = null;
+            pieceSources["H5"] = null;
 
-            pieceImageSources["A4"] = null;
-            pieceImageSources["B4"] = null;
-            pieceImageSources["C4"] = null;
-            pieceImageSources["D4"] = null;
-            pieceImageSources["E4"] = null;
-            pieceImageSources["F4"] = null;
-            pieceImageSources["G4"] = null;
-            pieceImageSources["H4"] = null;
+            pieceSources["A4"] = null;
+            pieceSources["B4"] = null;
+            pieceSources["C4"] = null;
+            pieceSources["D4"] = null;
+            pieceSources["E4"] = null;
+            pieceSources["F4"] = null;
+            pieceSources["G4"] = null;
+            pieceSources["H4"] = null;
 
-            pieceImageSources["A3"] = null;
-            pieceImageSources["B3"] = null;
-            pieceImageSources["C3"] = null;
-            pieceImageSources["D3"] = null;
-            pieceImageSources["E3"] = null;
-            pieceImageSources["F3"] = null;
-            pieceImageSources["G3"] = null;
-            pieceImageSources["H3"] = null;
+            pieceSources["A3"] = null;
+            pieceSources["B3"] = null;
+            pieceSources["C3"] = null;
+            pieceSources["D3"] = null;
+            pieceSources["E3"] = null;
+            pieceSources["F3"] = null;
+            pieceSources["G3"] = null;
+            pieceSources["H3"] = null;
 
-            pieceImageSources["A2"] = new BitmapImage(new Uri("/Images/WhitePawn.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["B2"] = new BitmapImage(new Uri("/Images/WhitePawn.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["C2"] = new BitmapImage(new Uri("/Images/WhitePawn.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["D2"] = new BitmapImage(new Uri("/Images/WhitePawn.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["E2"] = new BitmapImage(new Uri("/Images/WhitePawn.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["F2"] = new BitmapImage(new Uri("/Images/WhitePawn.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["G2"] = new BitmapImage(new Uri("/Images/WhitePawn.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["H2"] = new BitmapImage(new Uri("/Images/WhitePawn.png", UriKind.RelativeOrAbsolute));
+            pieceSources["A2"] = new BitmapImage(new Uri("/Images/WhitePawn.png", UriKind.RelativeOrAbsolute));
+            pieceSources["B2"] = new BitmapImage(new Uri("/Images/WhitePawn.png", UriKind.RelativeOrAbsolute));
+            pieceSources["C2"] = new BitmapImage(new Uri("/Images/WhitePawn.png", UriKind.RelativeOrAbsolute));
+            pieceSources["D2"] = new BitmapImage(new Uri("/Images/WhitePawn.png", UriKind.RelativeOrAbsolute));
+            pieceSources["E2"] = new BitmapImage(new Uri("/Images/WhitePawn.png", UriKind.RelativeOrAbsolute));
+            pieceSources["F2"] = new BitmapImage(new Uri("/Images/WhitePawn.png", UriKind.RelativeOrAbsolute));
+            pieceSources["G2"] = new BitmapImage(new Uri("/Images/WhitePawn.png", UriKind.RelativeOrAbsolute));
+            pieceSources["H2"] = new BitmapImage(new Uri("/Images/WhitePawn.png", UriKind.RelativeOrAbsolute));
 
-            pieceImageSources["A1"] = new BitmapImage(new Uri("/Images/WhiteRook.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["B1"] = new BitmapImage(new Uri("/Images/WhiteKnight.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["C1"] = new BitmapImage(new Uri("/Images/WhiteBishop.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["D1"] = new BitmapImage(new Uri("/Images/WhiteQueen.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["E1"] = new BitmapImage(new Uri("/Images/WhiteKing.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["F1"] = new BitmapImage(new Uri("/Images/WhiteBishop.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["G1"] = new BitmapImage(new Uri("/Images/WhiteKnight.png", UriKind.RelativeOrAbsolute));
-            pieceImageSources["H1"] = new BitmapImage(new Uri("/Images/WhiteRook.png", UriKind.RelativeOrAbsolute));
+            pieceSources["A1"] = new BitmapImage(new Uri("/Images/WhiteRook.png", UriKind.RelativeOrAbsolute));
+            pieceSources["B1"] = new BitmapImage(new Uri("/Images/WhiteKnight.png", UriKind.RelativeOrAbsolute));
+            pieceSources["C1"] = new BitmapImage(new Uri("/Images/WhiteBishop.png", UriKind.RelativeOrAbsolute));
+            pieceSources["D1"] = new BitmapImage(new Uri("/Images/WhiteQueen.png", UriKind.RelativeOrAbsolute));
+            pieceSources["E1"] = new BitmapImage(new Uri("/Images/WhiteKing.png", UriKind.RelativeOrAbsolute));
+            pieceSources["F1"] = new BitmapImage(new Uri("/Images/WhiteBishop.png", UriKind.RelativeOrAbsolute));
+            pieceSources["G1"] = new BitmapImage(new Uri("/Images/WhiteKnight.png", UriKind.RelativeOrAbsolute));
+            pieceSources["H1"] = new BitmapImage(new Uri("/Images/WhiteRook.png", UriKind.RelativeOrAbsolute));
         }
 
         private void SquareMouseDown(object sender, MouseButtonEventArgs e)
         {
-            originalImage = (sender as Grid)?.Children.OfType<Image>().FirstOrDefault();
-            if (originalImage == null) return;
+            Grid square = sender as Grid;
+            if(pieceSources.ContainsKey(square.Name) && pieceSources[square.Name] != null)
+            {
+                draggedPiece = square;
+                startPosition = e.GetPosition(draggedPiece);
 
+                pieceImage = new Image
+                {
+                    Source = pieceSources[square.Name],
+                    Width = 100,
+                    Height = 100,
+                    Opacity = 0.8
+                };
+                pieceImage.MouseMove += SquareMouseMove;
+                pieceImage.MouseUp += SquareMouseUp;
 
-            draggedPiece = sender as UIElement;
-            startPosition = e.GetPosition(board);
-            originalPosition = new Point(Canvas.GetLeft(originalImage), Canvas.GetTop(originalImage));
-            pieceImage = originalImage;
-            originalSource = originalImage.Source;
-            isDragging = true;
+                board.Children.Add(pieceImage);
+
+                Canvas.SetLeft(pieceImage, 0);
+                Canvas.SetTop(pieceImage, 0);
+
+                isDragging = true;
+            }
         }
 
         private void SquareMouseMove(object sender, MouseEventArgs e)
         {
-            if(isDragging && draggedPiece != null)
+            if(isDragging && pieceImage != null)
             {
                 Point currentPosition = e.GetPosition(board);
                 double offsetX = currentPosition.X - startPosition.X;
                 double offsetY = currentPosition.Y - startPosition.Y;
 
-                Canvas.SetLeft(draggedPiece, originalPosition.X + offsetX);
-                Canvas.SetTop(draggedPiece, originalPosition.Y + offsetY);
+                Canvas.SetLeft(pieceImage, Canvas.GetLeft(pieceImage) + offsetX);
+                Canvas.SetTop(pieceImage, Canvas.GetTop(pieceImage) + offsetY);
+
+                startPosition = currentPosition;
             }
         }
 
         private void SquareMouseUp(object sender, MouseButtonEventArgs e)
         {
-            Grid clickedSquare = sender as Grid;
-            if(clickedSquare != null)
+            if(isDragging && pieceImage != null)
             {
-                string squareName = clickedSquare.Name;
-
-                Debug.WriteLine(squareName);
-            }
-            if(isDragging && draggedPiece != null)
-            {
-                if(originalImage != null)
+                Grid targetSquare = FindSquareUnderMouse(e.GetPosition(board));
+                if (targetSquare != null)
                 {
-                    originalImage.Source = originalSource;
-                    Debug.WriteLine(originalImage.Source);
+                    pieceSources[targetSquare.Name] = pieceSources[draggedPiece.Name];
+                    pieceSources[draggedPiece.Name] = null;
+                    Debug.WriteLine(pieceSources[targetSquare.Name]);
                 }
-                draggedPiece = null;
+
+                for (int i = 1; i < 9; ++i) 
+                {
+                    string A = "A";
+                    A = string.Concat(A, i.ToString());
+                    string B = "B";
+                    B = string.Concat(B, i.ToString());
+                    string C = "C";
+                    C = string.Concat(C, i.ToString());
+                    string D = "D";
+                    D = string.Concat(D, i.ToString());
+                    string E = "E";
+                    E = string.Concat(E, i.ToString());
+                    string F = "F";
+                    F = string.Concat(F, i.ToString());
+                    string G = "G";
+                    G = string.Concat(G, i.ToString());
+                    string H = "H";
+                    H = string.Concat(H, i.ToString());
+
+                    Grid A_Update = FindName(A) as Grid;
+                    Grid B_Update = FindName(B) as Grid;
+                    Grid C_Update = FindName(C) as Grid;
+                    Grid D_Update = FindName(D) as Grid;
+                    Grid E_Update = FindName(E) as Grid;
+                    Grid F_Update = FindName(F) as Grid;
+                    Grid G_Update = FindName(G) as Grid;
+                    Grid H_Update = FindName(H) as Grid;
+
+                    Image A_ImageUpdate = A_Update.Children[0] as Image;
+                    Image B_ImageUpdate = B_Update.Children[0] as Image;
+                    Image C_ImageUpdate = C_Update.Children[0] as Image;
+                    Image D_ImageUpdate = D_Update.Children[0] as Image;
+                    Image E_ImageUpdate = E_Update.Children[0] as Image;
+                    Image F_ImageUpdate = F_Update.Children[0] as Image;
+                    Image G_ImageUpdate = G_Update.Children[0] as Image;
+                    Image H_ImageUpdate = H_Update.Children[0] as Image;
+
+                    A_ImageUpdate.Source = pieceSources[A];
+                    B_ImageUpdate.Source = pieceSources[B];
+                    C_ImageUpdate.Source = pieceSources[C];
+                    D_ImageUpdate.Source = pieceSources[D];
+                    E_ImageUpdate.Source = pieceSources[E];
+                    F_ImageUpdate.Source = pieceSources[F];
+                    G_ImageUpdate.Source = pieceSources[G];
+                    H_ImageUpdate.Source = pieceSources[H];
+                }
+
+                board.Children.Remove(pieceImage);
                 isDragging = false;
-                pieceImage = null;
+                draggedPiece = null;
             }
+        }
+
+        private Grid FindSquareUnderMouse(Point mousePosition)
+        {
+            foreach (UIElement child in board.Children)
+            {
+                if (child is Grid square && IsMouseOverSquare(square, mousePosition))
+                {
+                    Debug.WriteLine(square.Name);
+                    return square;
+                }
+            }
+            return null;
+        }
+
+        private bool IsMouseOverSquare(UIElement element, Point mousePosition)
+        {
+            Point elementPosition = element.TranslatePoint(new Point(0, 0), board);
+            Rect elementBounds = new Rect(elementPosition, element.RenderSize);
+            return elementBounds.Contains(mousePosition);
         }
     }
 }
