@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Collections.Generic;
-
 
 
 namespace ChessTest
@@ -24,13 +22,27 @@ namespace ChessTest
         private Image pieceImage;
         private Point startPosition;
         private int turn = 1; // 1 for white 0 for black
+        private int start = 0;
+        private int gameover = 0;
         private Dictionary<string, ImageSource> pieceSources = new Dictionary<String, ImageSource>();
         private Dictionary<string, int> pieceValues = new Dictionary<string, int>();
+
+        private TimeSpan whiteTime = TimeSpan.FromMinutes(5);
+        private TimeSpan blackTime = TimeSpan.FromMinutes(5);
+
+        DispatcherTimer timer = new DispatcherTimer(DispatcherPriority.Render);
 
         public MainWindow()
         {
             InitializeComponent();
             Loaded += WindowLoaded;
+
+
+            timerWhite.Content = whiteTime.ToString("mm\\:ss");
+            timerBlack.Content = blackTime.ToString("mm\\:ss");
+            timer.Interval = new TimeSpan(0, 0, 0, 1);
+            timer.Tick += TimerTick;
+            timer.Start();
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
@@ -180,44 +192,68 @@ namespace ChessTest
             pieceValues["H1"] = 5;
         }
 
-        private void SquareMouseDown(object sender, MouseButtonEventArgs e)
+        private void TimerTick(object sender, EventArgs e)
         {
-            Grid square = sender as Grid;
-            if(pieceSources.ContainsKey(square.Name) && pieceSources[square.Name] != null)
+            if (start == 1)
             {
-                draggedPiece = square;
-                startPosition = e.GetPosition(draggedPiece);
-
-                if ((pieceValues[square.Name] > 0 && turn == 1) || (pieceValues[square.Name] < 0 && turn == 0))
+                if (whiteTime.TotalSeconds < 0)
                 {
-                    pieceImage = new Image
-                    {
-                        Source = pieceSources[square.Name],
-                        Width = 100,
-                        Height = 100,
-                        Opacity = 0.8
-                    };
-                    pieceImage.MouseMove += SquareMouseMove;
-                    pieceImage.MouseUp += SquareMouseUp;
-
-                    board.Children.Add(pieceImage);
-
-                    Canvas.SetLeft(pieceImage, 0);
-                    Canvas.SetTop(pieceImage, 0);
-
-                    isDragging = true;
-                    if(turn == 1)
-                    {
-                        turn = 0;
-                    } else
-                    {
-                        turn = 1;
-                    }
+                    gameover = 1;
+                    start = 0;
+                }
+                else if (blackTime.TotalSeconds < 0)
+                {
+                    gameover = 1;
+                    start = 0;
+                }
+                else if (turn == 1)
+                {
+                    whiteTime = whiteTime.Add(TimeSpan.FromSeconds(-1));
+                    timerWhite.Content = whiteTime.ToString("mm\\:ss");
                 }
                 else
                 {
-                    isDragging = false;
-                    draggedPiece = null;
+                    blackTime = blackTime.Add(TimeSpan.FromSeconds(-1));
+                    timerBlack.Content = blackTime.ToString("mm\\:ss");
+                }
+            }
+        }
+
+        private void SquareMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (gameover == 0)
+            {
+                start = 1;
+
+                Grid square = sender as Grid;
+                if(pieceSources.ContainsKey(square.Name) && pieceSources[square.Name] != null)
+                {
+                    draggedPiece = square;
+                    startPosition = e.GetPosition(draggedPiece);
+
+                    if ((pieceValues[square.Name] > 0 && turn == 1) || (pieceValues[square.Name] < 0 && turn == 0))
+                    {
+                        pieceImage = new Image
+                        {
+                            Source = pieceSources[square.Name],
+                            Width = 100,
+                            Height = 100,
+                            Opacity = 0.8
+                        };
+                    
+                        pieceImage.MouseMove += SquareMouseMove;
+                        pieceImage.MouseUp += SquareMouseUp;
+
+                        Canvas.SetLeft(pieceImage, 0);
+                        Canvas.SetTop(pieceImage, 0);
+
+                        isDragging = true;
+                    }
+                    else
+                    {
+                        isDragging = false;
+                        draggedPiece = null;
+                    }
                 }
             }
         }
@@ -242,65 +278,71 @@ namespace ChessTest
             if(isDragging && pieceImage != null)
             {
                 Grid targetSquare = FindSquareUnderMouse(e.GetPosition(board));
-                if (targetSquare != null)
+                if(pieceValues[targetSquare.Name] <= 0 && pieceValues[draggedPiece.Name] >= 0 ||
+                   pieceValues[targetSquare.Name] >= 0 && pieceValues[draggedPiece.Name] <= 0)
                 {
-                    pieceSources[targetSquare.Name] = pieceSources[draggedPiece.Name];
-                    pieceSources[draggedPiece.Name] = null;
+                    if (targetSquare != null)
+                    {
+                        pieceSources[targetSquare.Name] = pieceSources[draggedPiece.Name];
+                        pieceSources[draggedPiece.Name] = null;
 
-                    pieceValues[targetSquare.Name] = pieceValues[draggedPiece.Name];
-                    pieceValues[draggedPiece.Name] = 0;
+                        pieceValues[targetSquare.Name] = pieceValues[draggedPiece.Name];
+                        pieceValues[draggedPiece.Name] = 0;
+                    }
+
+                    for (int i = 1; i < 9; ++i) 
+                    {
+                        string A = "A";
+                        A = string.Concat(A, i.ToString());
+                        string B = "B";
+                        B = string.Concat(B, i.ToString());
+                        string C = "C";
+                        C = string.Concat(C, i.ToString());
+                        string D = "D";
+                        D = string.Concat(D, i.ToString());
+                        string E = "E";
+                        E = string.Concat(E, i.ToString());
+                        string F = "F";
+                        F = string.Concat(F, i.ToString());
+                        string G = "G";
+                        G = string.Concat(G, i.ToString());
+                        string H = "H";
+                        H = string.Concat(H, i.ToString());
+
+                        Grid A_UpdateSources = FindName(A) as Grid;
+                        Grid B_UpdateSources = FindName(B) as Grid;
+                        Grid C_UpdateSources = FindName(C) as Grid;
+                        Grid D_UpdateSources = FindName(D) as Grid;
+                        Grid E_UpdateSources = FindName(E) as Grid;
+                        Grid F_UpdateSources = FindName(F) as Grid;
+                        Grid G_UpdateSources = FindName(G) as Grid;
+                        Grid H_UpdateSources = FindName(H) as Grid;
+
+                        Image A_ImageUpdateSources = A_UpdateSources.Children[0] as Image;
+                        Image B_ImageUpdateSources = B_UpdateSources.Children[0] as Image;
+                        Image C_ImageUpdateSources = C_UpdateSources.Children[0] as Image;
+                        Image D_ImageUpdateSources = D_UpdateSources.Children[0] as Image;
+                        Image E_ImageUpdateSources = E_UpdateSources.Children[0] as Image;
+                        Image F_ImageUpdateSources = F_UpdateSources.Children[0] as Image;
+                        Image G_ImageUpdateSources = G_UpdateSources.Children[0] as Image;
+                        Image H_ImageUpdateSources = H_UpdateSources.Children[0] as Image;
+
+                        A_ImageUpdateSources.Source = pieceSources[A];
+                        B_ImageUpdateSources.Source = pieceSources[B];
+                        C_ImageUpdateSources.Source = pieceSources[C];
+                        D_ImageUpdateSources.Source = pieceSources[D];
+                        E_ImageUpdateSources.Source = pieceSources[E];
+                        F_ImageUpdateSources.Source = pieceSources[F];
+                        G_ImageUpdateSources.Source = pieceSources[G];
+                        H_ImageUpdateSources.Source = pieceSources[H];
+                    }
+
+                    board.Children.Remove(pieceImage);
+                    isDragging = false;
+                    draggedPiece = null;
+
+                    turn = turn == 1 ? 0 : 1;
                 }
-
-                for (int i = 1; i < 9; ++i) 
-                {
-                    string A = "A";
-                    A = string.Concat(A, i.ToString());
-                    string B = "B";
-                    B = string.Concat(B, i.ToString());
-                    string C = "C";
-                    C = string.Concat(C, i.ToString());
-                    string D = "D";
-                    D = string.Concat(D, i.ToString());
-                    string E = "E";
-                    E = string.Concat(E, i.ToString());
-                    string F = "F";
-                    F = string.Concat(F, i.ToString());
-                    string G = "G";
-                    G = string.Concat(G, i.ToString());
-                    string H = "H";
-                    H = string.Concat(H, i.ToString());
-
-                    Grid A_UpdateSources = FindName(A) as Grid;
-                    Grid B_UpdateSources = FindName(B) as Grid;
-                    Grid C_UpdateSources = FindName(C) as Grid;
-                    Grid D_UpdateSources = FindName(D) as Grid;
-                    Grid E_UpdateSources = FindName(E) as Grid;
-                    Grid F_UpdateSources = FindName(F) as Grid;
-                    Grid G_UpdateSources = FindName(G) as Grid;
-                    Grid H_UpdateSources = FindName(H) as Grid;
-
-                    Image A_ImageUpdateSources = A_UpdateSources.Children[0] as Image;
-                    Image B_ImageUpdateSources = B_UpdateSources.Children[0] as Image;
-                    Image C_ImageUpdateSources = C_UpdateSources.Children[0] as Image;
-                    Image D_ImageUpdateSources = D_UpdateSources.Children[0] as Image;
-                    Image E_ImageUpdateSources = E_UpdateSources.Children[0] as Image;
-                    Image F_ImageUpdateSources = F_UpdateSources.Children[0] as Image;
-                    Image G_ImageUpdateSources = G_UpdateSources.Children[0] as Image;
-                    Image H_ImageUpdateSources = H_UpdateSources.Children[0] as Image;
-
-                    A_ImageUpdateSources.Source = pieceSources[A];
-                    B_ImageUpdateSources.Source = pieceSources[B];
-                    C_ImageUpdateSources.Source = pieceSources[C];
-                    D_ImageUpdateSources.Source = pieceSources[D];
-                    E_ImageUpdateSources.Source = pieceSources[E];
-                    F_ImageUpdateSources.Source = pieceSources[F];
-                    G_ImageUpdateSources.Source = pieceSources[G];
-                    H_ImageUpdateSources.Source = pieceSources[H];
-                }
-
-                board.Children.Remove(pieceImage);
-                isDragging = false;
-                draggedPiece = null;
             }
         }
 
