@@ -9,6 +9,9 @@ namespace ChessTest.Helpers
 {
     public class PieceMoves
     {
-
+        public bool IsPawnMoveLegal()
+        {
+            return true;
+        }
     }
 }

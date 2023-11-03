@@ -13,28 +13,35 @@ namespace ChessTest
         
     public partial class MainWindow : Window
     {
-
+        // Variables for helping piece movement
         private bool isDragging = false;
         private Grid draggedPiece;
         private Image pieceImage;
         private Point startPosition;
-        private int turn = 1; // 1 for white 0 for black
+
+        // Dictionary and other global variable initialization
+        private Dictionary<string, PieceValues> PieceData = new Dictionary<String, PieceValues>();
+        private int turn = 1;
         private int start = 0;
         private int gameover = 0;
-        private Dictionary<string, ImageSource> PieceSources = new Dictionary<String, ImageSource>();
-        private Dictionary<string, int> PieceValues = new Dictionary<string, int>();
 
-        private TimeSpan whiteTime = TimeSpan.FromMinutes(5);
-        private TimeSpan blackTime = TimeSpan.FromMinutes(5);
-
-        DispatcherTimer timer = new DispatcherTimer(DispatcherPriority.Render);
+        // Timer intialization, change .FromMinutes value if you want to play with a different amount of time
+        private TimeSpan whiteTime;
+        private TimeSpan blackTime;
+        readonly DispatcherTimer timer = new DispatcherTimer(DispatcherPriority.Render);
 
         public MainWindow()
         {
+            var TimeSelection = new TimeSelection();
+            if(TimeSelection.ShowDialog() == true)
+            {
+                whiteTime = TimeSpan.FromMinutes(TimeSelection.TotalTime);
+                blackTime = TimeSpan.FromMinutes(TimeSelection.TotalTime);
+            }
             InitializeComponent();
             Loaded += WindowLoaded;
 
-
+            // TODO: make a separate window for the user to select how much time they would like
             timerWhite.Content = whiteTime.ToString("mm\\:ss");
             timerBlack.Content = blackTime.ToString("mm\\:ss");
             timer.Interval = new TimeSpan(0, 0, 0, 1);
@@ -44,10 +51,11 @@ namespace ChessTest
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            PieceSources = PieceData.PieceSources;
-            PieceValues = PieceData.PieceValues;
+            // Main dictionary for the piece data including image source and piece values
+            PieceData = HelperDict.PieceData;
         }
 
+        // Function to update the timers of each of the players
         private void TimerTick(object sender, EventArgs e)
         {
             if (start == 1)
@@ -75,6 +83,8 @@ namespace ChessTest
             }
         }
 
+        // Action when the user clicks on a piece on the board
+        // Creates a copy of the piece and determines if the game is over by timeout
         private void SquareMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (gameover == 0)
@@ -82,16 +92,16 @@ namespace ChessTest
                 start = 1;
 
                 Grid square = sender as Grid;
-                if(PieceSources.ContainsKey(square.Name) && PieceSources[square.Name] != null)
+                if(PieceData.ContainsKey(square.Name) && PieceData[square.Name] != null)
                 {
                     draggedPiece = square;
                     startPosition = e.GetPosition(draggedPiece);
 
-                    if ((PieceValues[square.Name] > 0 && turn == 1) || (PieceValues[square.Name] < 0 && turn == 0))
+                    if ((PieceData[square.Name].Value > 0 && turn == 1) || (PieceData[square.Name].Value < 0 && turn == 0))
                     {
                         pieceImage = new Image
                         {
-                            Source = PieceSources[square.Name],
+                            Source = PieceData[square.Name].Image,
                             Width = 100,
                             Height = 100,
                             Opacity = 0.8
@@ -114,6 +124,7 @@ namespace ChessTest
             }
         }
 
+        // Finds where the mouse is being moved on the chess board
         private void SquareMouseMove(object sender, MouseEventArgs e)
         {
             if(isDragging && pieceImage != null)
@@ -129,21 +140,27 @@ namespace ChessTest
             }
         }
 
+        // Action after the user lifts the mouse button up
+        // Calls Update function to update the dictionaries if there is a piece placed
         private void SquareMouseUp(object sender, MouseButtonEventArgs e)
         {
+            
             if(isDragging && pieceImage != null)
             {
                 Grid targetSquare = FindSquareUnderMouse(e.GetPosition(board));
-                if(PieceValues[targetSquare.Name] <= 0 && PieceValues[draggedPiece.Name] >= 0 ||
-                   PieceValues[targetSquare.Name] >= 0 && PieceValues[draggedPiece.Name] <= 0)
+                if(PieceData[targetSquare.Name].Value <= 0 && PieceData[draggedPiece.Name].Value >= 0 ||
+                   PieceData[targetSquare.Name].Value >= 0 && PieceData[draggedPiece.Name].Value <= 0)
                 {
                     if (targetSquare != null)
                     {
-                        PieceSources[targetSquare.Name] = PieceSources[draggedPiece.Name];
-                        PieceSources[draggedPiece.Name] = null;
+                        PieceData[targetSquare.Name].Image = PieceData[draggedPiece.Name].Image;
+                        PieceData[draggedPiece.Name].Image = null;
 
-                        PieceValues[targetSquare.Name] = PieceValues[draggedPiece.Name];
-                        PieceValues[draggedPiece.Name] = 0;
+                        PieceData[targetSquare.Name].Value = PieceData[draggedPiece.Name].Value;
+                        PieceData[draggedPiece.Name].Value = 0;
+
+                        PieceData[targetSquare.Name].Piece = PieceData[draggedPiece.Name].Piece;
+                        PieceData[draggedPiece.Name].Piece = '_';
                     }
 
                     Update();
@@ -157,6 +174,7 @@ namespace ChessTest
             }
         }
 
+        // Finds the sqaure under the users mouse positition on the board
         private Grid FindSquareUnderMouse(Point mousePosition)
         {
             foreach (UIElement child in board.Children)
@@ -169,6 +187,7 @@ namespace ChessTest
             return null;
         }
 
+        // Determines if the users mouse if over a square for the piece to be placed on
         private bool IsMouseOverSquare(UIElement element, Point mousePosition)
         {
             Point elementPosition = element.TranslatePoint(new Point(0, 0), board);
@@ -176,6 +195,8 @@ namespace ChessTest
             return elementBounds.Contains(mousePosition);
         }
 
+        // Updates the source and values of each of the pieces on the board after a move is made
+        // Could be made faster if there is only the two squares which need to be updated
         private void Update()
         {
             string[] letters = {"A", "B", "C", "D", "E", "F", "G", "H"};
@@ -183,13 +204,16 @@ namespace ChessTest
             {
                 foreach (string letter in letters)
                 {
-                    string position = string.Concat(letter, i.ToString()); 
+                    string position = string.Concat(letter, i.ToString());
 
                     Grid UpdateSources = FindName(position) as Grid;
 
                     Image ImageUpdateSources = UpdateSources.Children[0] as Image;
 
-                    ImageUpdateSources.Source = PieceSources[position];
+                    ImageUpdateSources.Source = PieceData[position].Image;
+                    Console.WriteLine(PieceData[position].Image);
+                    Console.WriteLine(PieceData[position].Value);
+                    Console.WriteLine(PieceData[position].Piece);
                 }
             }
         }
