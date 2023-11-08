@@ -7,7 +7,24 @@
         mc:Ignorable="d"
         Title="Chess" Height="400" Width="400" Background="#FF4C7997">
     <Grid>
-        <Label x:Name="Winner" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10,10,0,0" FontFamily="Yu Gothic UI Semibold" FontSize="30"/>
-        <Button Content="Play Again?" Click="Button_Click" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Yu Gothic UI Semibold" FontSize="30"/>
+        <Label x:Name="Winner" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10,30,0,0" 
+               FontFamily="Yu Gothic UI Bold" FontSize="30" Foreground="White"/>
+        <Border BorderBrush="white" BorderThickness="4" HorizontalAlignment="Center" VerticalAlignment="Center"
+                Height="125" Width="230" Margin="0,0,0,25">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Height="150" Width="250" Margin="0,0,0,0">
+                <Label Content="Score" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,0"
+                           FontFamily="Yu Gothic UI Semibold" FontSize="30" Foreground="White"/>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center"
+                        Height="100" Width="300" Margin="0,0,0,0">
+                    <Label x:Name="WhiteScore" Content="White: 0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50,0,0,30"
+                            FontFamily="Yu Gothic UI Semibold" FontSize="20" Foreground="White"/>
+                    <Label x:Name="BlackScore" Content="Black: 0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="25,0,0,30"
+                        FontFamily="Yu Gothic UI Semibold" FontSize="20" Foreground="White"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <Button Content="Play Again?" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,50"
+                Click="Button_Click" FontFamily="Yu Gothic UI Semibold" FontSize="30"/>
     </Grid>
 </Window>

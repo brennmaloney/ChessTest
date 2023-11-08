@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Chess" Height="400" Width="400" Background="#FF4C7997">
     <Grid>
-        <Label Content="Select Amount of Time:" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10,10,0,0"
+        <Label Content="Select Amount of Time:" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10,30,0,0"
                FontSize="30" FontFamily="Yu Gothic UI Semibold" Foreground="White"/>
         <StackPanel x:Name="time" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Button Content="Bullet" Click="ChangeBullet" Tag="1" HorizontalAlignment="Center" VerticalAlignment="Center"
