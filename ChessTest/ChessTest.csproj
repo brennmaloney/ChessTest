@@ -58,7 +58,10 @@
     <Compile Include="TimeSelection.xaml.cs">
       <DependentUpon>TimeSelection.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow.xaml">
+    <Compile Include="EndGame.xaml.cs">
+      <DependentUpon>EndGame.xaml</DependentUpon>
+    </Compile>
+    <Page Include="ChessBoard.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -68,11 +71,15 @@
     </Compile>
     <Compile Include="Helpers\HelperDict.cs" />
     <Compile Include="Helpers\PieceMoves.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="ChessBoard.xaml.cs">
+      <DependentUpon>ChessBoard.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="TimeSelection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EndGame.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

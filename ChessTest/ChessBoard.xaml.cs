@@ -3,15 +3,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using System.Windows.Media;
 using System.Collections.Generic;
 using ChessTest.Helpers;
-
 
 namespace ChessTest
 {
         
-    public partial class MainWindow : Window
+    public partial class ChessBoard : Window
     {
         // Variables for helping piece movement
         private bool isDragging = false;
@@ -24,20 +22,19 @@ namespace ChessTest
         private int turn = 1;
         private int start = 0;
         private int gameover = 0;
+        public static int whiteLost = 0;
+        public static int blackLost = 0;
 
         // Timer intialization, change .FromMinutes value if you want to play with a different amount of time
         private TimeSpan whiteTime;
         private TimeSpan blackTime;
         readonly DispatcherTimer timer = new DispatcherTimer(DispatcherPriority.Render);
 
-        public MainWindow()
+        public ChessBoard()
         {
-            var TimeSelection = new TimeSelection();
-            if(TimeSelection.ShowDialog() == true)
-            {
-                whiteTime = TimeSpan.FromMinutes(TimeSelection.TotalTime);
-                blackTime = TimeSpan.FromMinutes(TimeSelection.TotalTime);
-            }
+            whiteTime = TimeSpan.FromMinutes(TimeSelection.TotalTime);
+            blackTime = TimeSpan.FromMinutes(TimeSelection.TotalTime);
+            
             InitializeComponent();
             Loaded += WindowLoaded;
 
@@ -55,6 +52,19 @@ namespace ChessTest
             PieceData = HelperDict.PieceData;
         }
 
+        private void Gameover()
+        {
+            Console.WriteLine(whiteLost);
+            Console.WriteLine(blackLost);
+            EndGame endGame = new EndGame
+            {
+                Left = 100,
+                Top = 100
+            };
+            endGame.Show();
+            Close();
+        }
+
         // Function to update the timers of each of the players
         private void TimerTick(object sender, EventArgs e)
         {
@@ -62,13 +72,19 @@ namespace ChessTest
             {
                 if (whiteTime.TotalSeconds < 0)
                 {
+                    timer.Stop();
                     gameover = 1;
                     start = 0;
+                    whiteLost = 1;
+                    Gameover();
                 }
                 else if (blackTime.TotalSeconds < 0)
                 {
+                    timer.Stop();
                     gameover = 1;
                     start = 0;
+                    blackLost = 1;
+                    Gameover();
                 }
                 else if (turn == 1)
                 {
@@ -216,6 +232,21 @@ namespace ChessTest
                     Console.WriteLine(PieceData[position].Piece);
                 }
             }
+        }
+
+        private void WhiteResign(object sender, RoutedEventArgs e)
+        {
+            timer.Stop();
+            gameover = 1;
+            whiteLost = 1;
+            Gameover();
+        }
+        private void BlackResign(object sender, RoutedEventArgs e)
+        {
+            timer.Stop();
+            gameover = 1;
+            blackLost = 1;
+            Gameover();
         }
     }
 }
